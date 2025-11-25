@@ -51,11 +51,32 @@
         
         body.no-scroll { overflow: hidden; }
 
-        /* --- PRO DETAILS (Scrollbar & Selection) --- */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050507; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        /* --- PRO DETAILS (SCROLLBAR & SELECTION) --- */
+        
+        /* Firefox */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) var(--bg);
+        }
+
+        /* Chrome, Edge, Safari, Mobile WebKit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: var(--bg);
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+            border: 2px solid var(--bg); /* Crea spazio intorno */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Selezione Testo */
         ::selection { background: var(--accent); color: white; }
 
         /* --- 2. BACKGROUND --- */
@@ -204,7 +225,6 @@
 
         .grid {
             display: grid; 
-            /* Responsive mobile friendly */
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
             gap: 40px;
             perspective: 1000px;
@@ -224,7 +244,6 @@
             opacity: 0.8; filter: grayscale(30%);
             transform: translateZ(0);
         }
-        /* Su desktop: effetto hover */
         .card:hover img { opacity: 1; filter: grayscale(0%); transform: scale(1.03) translateZ(10px); }
 
         .card-overlay {
@@ -252,34 +271,21 @@
 
         footer { padding: 80px 5%; text-align: center; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 600;}
 
-        /* --- VIDEO MODAL --- */
-        .video-modal {
+        /* --- MODALS --- */
+        .video-modal, .photo-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95); z-index: 3000;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
             backdrop-filter: blur(10px);
         }
-        .video-modal.active { opacity: 1; pointer-events: all; }
+        .video-modal.active, .photo-modal.active { opacity: 1; pointer-events: all; }
+        
         .video-wrapper {
             width: 90%; max-width: 1200px; aspect-ratio: 16/9;
             position: relative; box-shadow: 0 0 50px rgba(139, 92, 246, 0.2);
         }
         .video-wrapper iframe { width: 100%; height: 100%; border: none; border-radius: 8px; }
-        .close-btn {
-            position: absolute; top: 20px; right: 30px;
-            color: white; font-size: 2.5rem; cursor: pointer; transition: 0.3s; z-index: 3001;
-        }
-        .close-btn:hover { color: var(--accent); transform: rotate(90deg); }
-
-        /* --- PHOTO MODAL (GALLERY & SINGLE) --- */
-        .photo-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.98); z-index: 3100;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
-        .photo-modal.active { opacity: 1; pointer-events: all; }
         
         .photo-container {
             width: 90%; height: 85%; display: flex; justify-content: center; align-items: center; position: relative;
@@ -288,7 +294,13 @@
             max-width: 100%; max-height: 100%; width: auto; height: auto; 
             object-fit: contain; box-shadow: 0 0 30px rgba(0,0,0,0.5); border-radius: 4px;
         }
-        
+
+        .close-btn {
+            position: absolute; top: 20px; right: 30px;
+            color: white; font-size: 2.5rem; cursor: pointer; transition: 0.3s; z-index: 3001;
+        }
+        .close-btn:hover { color: var(--accent); transform: rotate(90deg); }
+
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.1); color: white; border: none;
@@ -306,9 +318,7 @@
         }
 
         /* OVERRIDE PER MODALE SINGOLA */
-        .single-photo-modal .nav-btn, .single-photo-modal .photo-counter {
-            display: none;
-        }
+        .single-photo-modal .nav-btn, .single-photo-modal .photo-counter { display: none; }
 
         /* --- RESPONSIVE (FIX MOBILE) --- */
         @media (max-width: 1024px) {
@@ -329,28 +339,17 @@
             .filters button { margin: 0; flex-grow: 1; text-align: center;}
             
             /* Grid Mobile Fix */
-            .grid { 
-                grid-template-columns: 1fr; 
-                gap: 30px;
-            }
+            .grid { grid-template-columns: 1fr; gap: 30px; }
             
             /* TITOLI E FOTO SEMPRE VISIBILI SU MOBILE */
             .card img {
-                opacity: 1 !important; /* Sempre visibili */
-                filter: none !important; /* Sempre colorate */
-                transform: none !important; /* Niente 3D */
+                opacity: 1 !important; filter: none !important; transform: none !important;
             }
             .card-overlay {
-                opacity: 1 !important; /* Titolo sempre visibile */
-                transform: none !important; /* Niente animazione a scorrimento */
+                opacity: 1 !important; transform: none !important;
                 background: linear-gradient(to top, rgba(5, 5, 7, 0.9) 0%, transparent 100%); 
             }
-            
-            /* Disabilita Tilt 3D su mobile per evitare sfarfallio */
-            .card {
-                transform: none !important;
-                perspective: none;
-            }
+            .card { transform: none !important; perspective: none; }
 
             .nav-btn { width: 40px; height: 40px; font-size: 1rem; background: rgba(0,0,0,0.5); }
             .prev-btn { left: 0; } .next-btn { right: 0; }
@@ -587,10 +586,10 @@
             </div>
 
             <div class="card video 3d" onclick="openVideo('7b-JryexLc4')" onmousemove="cardTilt(event, this)" onmouseleave="cardReset(this)">
-                <img src="https://img.youtube.com/vi/7b-JryexLc4/maxresdefault.jpg" alt="Neuromante" loading="lazy">
+                <img src="https://img.youtube.com/vi/7b-JryexLc4/maxresdefault.jpg" alt="Neuromate" loading="lazy">
                 <div class="card-overlay">
                     <span class="card-cat">Video / 3D</span>
-                    <div class="card-title">Neuromante</div>
+                    <div class="card-title">Neuromate</div>
                 </div>
             </div>
 
@@ -701,10 +700,6 @@
         </div>
     </section>
 
-    <footer>
-        © 2025 Andrea Borzì. All rights reserved.
-    </footer>
-
     <div class="video-modal" id="videoModal" onclick="closeVideo()">
         <div class="close-btn" onclick="closeVideo()">
             <i class="fa-solid fa-xmark"></i>
@@ -811,22 +806,19 @@
         }
         mobileOverlay.addEventListener('click', function(e) { if (e.target === mobileOverlay) toggleMobileMenu(); });
 
-        // 3. SMART FILTER LOGIC (Aggiornata!)
+        // 3. SMART FILTER LOGIC
         function filterSelection(category) {
             var cards = document.getElementsByClassName("card");
             var btns = document.querySelector(".filters").getElementsByTagName("button");
             
-            // Gestione pulsanti attivi
             for (var i = 0; i < btns.length; i++) {
                 btns[i].classList.remove("active");
                 let btnText = btns[i].innerText.toLowerCase();
-                // Attiva il bottone corretto
                 if(btnText.includes(category) || (category == 'all' && btnText == 'all') || (category == 'photo' && btnText == 'photo')) {
                     btns[i].classList.add("active");
                 }
             }
             
-            // Logica di filtro avanzata
             for (var i = 0; i < cards.length; i++) {
                 let cardClasses = cards[i].className.toLowerCase();
                 let shouldShow = false;
@@ -834,20 +826,15 @@
                 if (category == 'all') {
                     shouldShow = true;
                 } else if (category == 'photo') {
-                    // Mostra se ha 'photo' O 'virtualphoto'
                     if (cardClasses.includes('photo') || cardClasses.includes('virtualphoto')) shouldShow = true;
                 } else if (category == 'video') {
-                    // Mostra se ha 'video' O 'montage'
                     if (cardClasses.includes('video') || cardClasses.includes('montage')) shouldShow = true;
                 } else if (category == '3d') {
-                    // Mostra se ha '3d', 'dev' O 'game'
                     if (cardClasses.includes('3d') || cardClasses.includes('dev') || cardClasses.includes('game')) shouldShow = true;
                 } else {
-                    // Fallback per categorie singole (es. se in futuro aggiungi un bottone 'Game')
                     if (cardClasses.includes(category)) shouldShow = true;
                 }
 
-                // Applica visibilità
                 if (shouldShow) {
                     cards[i].style.display = "block";
                     setTimeout((el) => { el.style.opacity = "1"; el.style.transform = "scale(1) translateZ(0)"; }, 50, cards[i]);
@@ -856,7 +843,6 @@
                 }
             }
         }
-        // Inizializza mostrando tutto
         filterSelection('all');
 
         // 4. TILT EFFECT
@@ -891,26 +877,15 @@
 
         // 6. PHOTO GALLERY LOGIC
         const photoProjects = {
-            'cittainv': [], // Città Invisibili
-            'sagata': [],   // Sagata
-            'seriecatania': [] // Promozione Catania
+            'cittainv': [], 'sagata': [], 'seriecatania': []
         };
 
-        // Generatore automatico per CITTÀ INVISIBILI (1.jpg ... 18.jpg)
-        for (let i = 1; i <= 18; i++) {
-            photoProjects['cittainv'].push(`img/cittainv/${i}.jpg`);
-        }
-
-        // Generatore automatico per SAGATA (01.jpg ... 30.jpg)
+        for (let i = 1; i <= 18; i++) photoProjects['cittainv'].push(`img/cittainv/${i}.jpg`);
         for (let i = 1; i <= 30; i++) {
             let fileName = i.toString().padStart(2, '0') + ".jpg";
             photoProjects['sagata'].push(`img/sagata/${fileName}`);
         }
-
-        // Generatore per SERIE C CATANIA (0.jpg ... 14.jpg)
-        for (let i = 0; i <= 14; i++) {
-            photoProjects['seriecatania'].push(`img/seriecatania/${i}.jpg`);
-        }
+        for (let i = 0; i <= 14; i++) photoProjects['seriecatania'].push(`img/seriecatania/${i}.jpg`);
 
         let currentProjectKey = '';
         let currentPhotoIndex = 0;
@@ -920,10 +895,8 @@
 
         function openPhotoProject(projectKey) {
             if (!photoProjects[projectKey]) return;
-            
             currentProjectKey = projectKey;
             currentPhotoIndex = 0;
-            
             updatePhotoDisplay();
             photoModal.classList.add('active');
             document.body.classList.add('no-scroll');
@@ -939,10 +912,8 @@
         function changePhoto(direction) {
             const total = photoProjects[currentProjectKey].length;
             currentPhotoIndex += direction;
-            
             if (currentPhotoIndex >= total) currentPhotoIndex = 0;
             if (currentPhotoIndex < 0) currentPhotoIndex = total - 1;
-            
             updatePhotoDisplay();
         }
 
@@ -960,6 +931,24 @@
             if(e.key === "ArrowRight") changePhoto(1);
             if(e.key === "ArrowLeft") changePhoto(-1);
             if(e.key === "Escape") closePhoto();
+        }
+
+        // TOUCH SWIPE LOGIC
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        photoModal.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        photoModal.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changePhoto(1); // Swipe Left -> Next
+            if (touchEndX > touchStartX + 50) changePhoto(-1); // Swipe Right -> Prev
         }
 
         // 7. SINGLE PHOTO MODAL LOGIC
