@@ -9,7 +9,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://andrea-borzi.github.io/">
     <meta property="og:title" content="Andrea Borzì | Visual Artist">
-    <meta property="og:description" content="Videomaker, 3D Artist & Photographer Portfolio. Crafting immersive digital experiences.">
+    <meta property="og:description" content="Videomaker, 3D Artist & Photographer Portfolio.">
     <meta property="og:image" content="social-preview.jpg">
 
     <meta name="twitter:card" content="summary_large_image">
@@ -196,7 +196,9 @@
         }
 
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 40px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 40px;
             perspective: 1000px;
         }
 
@@ -214,7 +216,7 @@
             opacity: 0.8; filter: grayscale(30%);
             transform: translateZ(0);
         }
-        /* Su desktop: effetto hover (su mobile è disattivato via media query) */
+        /* Su desktop: effetto hover */
         .card:hover img { opacity: 1; filter: grayscale(0%); transform: scale(1.03) translateZ(10px); }
 
         .card-overlay {
@@ -489,6 +491,14 @@
                 </div>
             </div>
 
+            <div class="card photo" onclick="openPhotoProject('seriecatania')" onmousemove="cardTilt(event, this)" onmouseleave="cardReset(this)">
+                <img src="img/copertine/seriecatania.jpg" alt="Promozione in Serie C Catania">
+                <div class="card-overlay">
+                    <span class="card-cat">Photography</span>
+                    <div class="card-title">Promozione in Serie C Catania</div>
+                </div>
+            </div>
+
             <div class="card video" onclick="openVideo('8mQ_yogXGR4')" onmousemove="cardTilt(event, this)" onmouseleave="cardReset(this)">
                 <img src="https://img.youtube.com/vi/8mQ_yogXGR4/maxresdefault.jpg" alt="Radiant Rose Academy">
                 <div class="card-overlay">
@@ -758,7 +768,8 @@
         // 6. PHOTO GALLERY LOGIC
         const photoProjects = {
             'cittainv': [], // Città Invisibili
-            'sagata': []    // Sagata
+            'sagata': [],   // Sagata
+            'seriecatania': [] // Promozione Catania
         };
 
         // Generatore automatico per CITTÀ INVISIBILI (1.jpg ... 18.jpg)
@@ -770,6 +781,11 @@
         for (let i = 1; i <= 30; i++) {
             let fileName = i.toString().padStart(2, '0') + ".jpg";
             photoProjects['sagata'].push(`img/sagata/${fileName}`);
+        }
+
+        // Generatore per SERIE C CATANIA (0.jpg ... 14.jpg)
+        for (let i = 0; i <= 14; i++) {
+            photoProjects['seriecatania'].push(`img/seriecatania/${i}.jpg`);
         }
 
         let currentProjectKey = '';
